@@ -4,14 +4,27 @@ using UnityEngine;
 
 public class ObjectMovement : MonoBehaviour
 {
-    public float speed;
-    public Vector3 direction;
     public enum MovementType{
         Rotation,
-        Translation
+        Translation           
     }
-    public MovementType movementType;
 
+    public enum Pivot{
+        Global,
+        Local
+    }
+
+    [System.Serializable]
+    public struct Movement{
+
+        public MovementType type;
+        public Space space;
+        public float speed;
+        public Vector3 direction;
+
+    }
+   
+    public List<Movement> movements;
 
     // Start is called before the first frame update
     void Start()
@@ -21,26 +34,32 @@ public class ObjectMovement : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {   
+                
+        foreach(Movement mov in movements){
 
-    if (movementType == MovementType.Rotation)   
-    {
-        transform.Rotate(direction * speed* Time.deltaTime,Space.World);
-    }
-    else if (movementType == MovementType.Translation)
-    {
-        transform.Translate(direction * speed * Time.deltaTime,Space.World);
+            
+            if (mov.type == MovementType.Rotation)   
+            {
+                transform.Rotate(mov.direction.normalized * mov.speed* Time.deltaTime,mov.space);
+            }
+            else if (mov.type == MovementType.Translation)
+            {
+                transform.Translate(mov.direction.normalized * mov.speed * Time.deltaTime,mov.space);
+            }
+            
+        }
+        
+        
+        // switch(mov.type){
+        //     case MovementType.Rotation:     
+        //         transform.Rotate(mov.direction * mov.speed* Time.deltaTime,Space.World);
+        //         break;
+        //     case MovementType.Translation:
+        //         transform.Translate(mov.direction * mov.speed * Time.deltaTime,Space.World);
+        //         break;
+        // }       
     }
     
-    // switch(movementType){
-    //     case MovementType.Rotation:     
-    //         transform.Rotate(direction * speed* Time.deltaTime,Space.World);
-    //         break;
-    //     case MovementType.Translation:
-    //         transform.Translate(direction * speed * Time.deltaTime,Space.World);
-    //         break;
-    // }       
-    
-    }
     
 }
